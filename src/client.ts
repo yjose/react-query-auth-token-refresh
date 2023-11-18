@@ -1,7 +1,7 @@
 import axios from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 
-import { refreshAuthLogic } from "./refresh-auth-logic";
+import { refreshAuth } from "./refresh-auth";
 
 export const client = axios.create({
   baseURL: "https://test-api.example.com",
@@ -16,7 +16,7 @@ export const removeHeaderToken = () => {
   delete client.defaults.headers.common.Authorization;
 };
 
-createAuthRefreshInterceptor(client, refreshAuthLogic, {
+createAuthRefreshInterceptor(client, refreshAuth, {
   statusCodes: [401], // default: [ 401 ]
   pauseInstanceWhileRefreshing: true,
 });

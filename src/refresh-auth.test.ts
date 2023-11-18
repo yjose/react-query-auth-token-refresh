@@ -5,7 +5,7 @@ import { useMe } from "./use-me";
 import { removeHeaderToken, setHeaderToken } from "./client";
 import { renderHook, waitFor } from "@testing-library/react";
 import { createRQWrapper } from "./test-utils";
-import * as ApiUtils from "./refresh-auth-logic";
+import * as ApiUtils from "./refresh-auth";
 
 const fetchNewTokenSpy = jest.spyOn(ApiUtils, "fetchNewToken");
 

@@ -8,7 +8,7 @@ export const fetchNewToken = async () => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const refreshAuthLogic = async (failedRequest: any) => {
+export const refreshAuth = async (failedRequest: any) => {
   const newToken = await fetchNewToken();
 
   if (newToken) {
