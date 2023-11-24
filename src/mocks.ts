@@ -1,6 +1,8 @@
-import { nockInstance } from "./test-utils";
-
+import nock from "nock";
 import type { User } from "./types";
+
+export const nockInstance = (options?: nock.Options) =>
+  nock(`https://test-api.example.com`, options);
 
 const userMock: Partial<User> = {
   email: "test@email.com",

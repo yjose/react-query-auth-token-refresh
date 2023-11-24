@@ -16,31 +16,7 @@ afterEach(() => {
 });
 
 describe("Refresh token Logic", () => {
-  it("should return error if the the api return error 500 + no call for refresh token api", async () => {
-    mockUserAPI("error");
-    const { result } = renderHook(() => useMe(), {
-      wrapper: createRQWrapper(),
-    });
-    await waitFor(() => {
-      expect(result.current.isError).toBe(true);
-    });
-
-    expect(fetchNewTokenSpy).toHaveBeenCalledTimes(0);
-  });
-
-  it("Should return error if we didn't set token to our axios client + no call for refresh token api", async () => {
-    mockUserAPI("success");
-    const { result } = renderHook(() => useMe(), {
-      wrapper: createRQWrapper(),
-    });
-    await waitFor(() => {
-      expect(result.current.isError).toBe(true);
-    });
-
-    expect(fetchNewTokenSpy).toHaveBeenCalledTimes(0);
-  });
-
-  it("should return the correct user if set valid token + no call to refresh token", async () => {
+  it("Should return the correct user details if token is valid + no call to refresh token", async () => {
     mockUserAPI("success");
     setHeaderToken("valid-token");
     const { result } = renderHook(() => useMe(), {
@@ -54,17 +30,28 @@ describe("Refresh token Logic", () => {
     expect(fetchNewTokenSpy).toHaveBeenCalledTimes(0);
   });
 
-  it("Should return error on refresh token call return error + refresh token should be called", async () => {
+  it("Should return error if token header do not exist + no call for refresh token api", async () => {
     mockUserAPI("success");
-    mockRefreshTokenAPI("error");
-    setHeaderToken("invalid-valid-token");
     const { result } = renderHook(() => useMe(), {
       wrapper: createRQWrapper(),
     });
     await waitFor(() => {
       expect(result.current.isError).toBe(true);
-      expect(fetchNewTokenSpy).toHaveBeenCalledTimes(1);
     });
+
+    expect(fetchNewTokenSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it("should return error if the the api return error different than 401 + no call for refresh token api", async () => {
+    mockUserAPI("error");
+    const { result } = renderHook(() => useMe(), {
+      wrapper: createRQWrapper(),
+    });
+    await waitFor(() => {
+      expect(result.current.isError).toBe(true);
+    });
+
+    expect(fetchNewTokenSpy).toHaveBeenCalledTimes(0);
   });
 
   it("should call refresh token on error 401 and return success after refreshing token successfully", async () => {
@@ -78,6 +65,19 @@ describe("Refresh token Logic", () => {
       expect(fetchNewTokenSpy).toHaveBeenCalledTimes(1);
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.data.email).toEqual("test@email.com");
+    });
+  });
+
+  it("Should return error on refresh token call return error + refresh token should be called", async () => {
+    mockUserAPI("success");
+    mockRefreshTokenAPI("error");
+    setHeaderToken("invalid-valid-token");
+    const { result } = renderHook(() => useMe(), {
+      wrapper: createRQWrapper(),
+    });
+    await waitFor(() => {
+      expect(result.current.isError).toBe(true);
+      expect(fetchNewTokenSpy).toHaveBeenCalledTimes(1);
     });
   });
 });

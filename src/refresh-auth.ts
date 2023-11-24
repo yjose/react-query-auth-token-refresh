@@ -1,10 +1,14 @@
-import axios from "axios";
-import { setHeaderToken } from "./client";
+import { client, setHeaderToken } from "./client";
 
 export const fetchNewToken = async () => {
-  return axios
-    .get("https://test-api.example.com/refresh-token")
-    .then((res) => res.data.token);
+  try {
+    const token: string = await client
+      .get("https://test-api.example.com/refresh-token")
+      .then((res) => res.data.token);
+    return token;
+  } catch (error) {
+    return null;
+  }
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
